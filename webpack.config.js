@@ -4,7 +4,7 @@ module.exports = {
   mode: 'production',
   entry: './src/main.js',
   output: {
-    filename: 'simple-html2pdf.js',
+    filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
   }
 };

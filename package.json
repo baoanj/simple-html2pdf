@@ -1,8 +1,8 @@
 {
   "name": "simple-html2pdf",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Simple html -> pdf converter using html2canvas and jsPDF.",
-  "main": "dist/simple-html2pdf.js",
+  "main": "dist/bundle.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/baoanj/simple-html2pdf.git"
