@@ -1,4 +1,4 @@
-const html2canvas = require('html2pdf.js');
+const html2canvas = require('html2canvas');
 const jsPDF = require('jspdf');
 
 (function (global, name, factory) {
@@ -11,7 +11,7 @@ const jsPDF = require('jspdf');
   } else {
     global[name] = factory.apply(this);
   }
-}(this, "simple-html2pdf", function () {
+}(this, "html2pdf", function () {
   function simpleHTML2PDF(element, options, callback) {
     const defaultOptions = {
       filename: 'file.pdf',
