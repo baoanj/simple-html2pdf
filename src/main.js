@@ -11,8 +11,8 @@ const jsPDF = require('jspdf');
   } else {
     global[name] = factory.apply(this);
   }
-}(this, "html2pdf", function () {
-  function simpleHTML2PDF(element, options, callback) {
+}(this, 'html2pdf', function () {
+  function html2pdf(element, options, callback) {
     const defaultOptions = {
       filename: 'file.pdf',
       margin: 20
@@ -56,5 +56,5 @@ const jsPDF = require('jspdf');
     });
   }
 
-  return simpleHTML2PDF;
+  return html2pdf;
 }));
