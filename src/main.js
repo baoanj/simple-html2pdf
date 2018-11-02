@@ -11,8 +11,8 @@ const jsPDF = require('jspdf');
   } else {
     global[name] = factory.apply(this);
   }
-}(this, 'html2pdf', function () {
-  function html2pdf(element, options, callback) {
+}(this, "simpleHTML2PDF", function () {
+  return function (element, options, callback) {
     const defaultOptions = {
       filename: 'file.pdf',
       margin: 20
@@ -21,7 +21,7 @@ const jsPDF = require('jspdf');
       Object.assign({}, defaultOptions, options) : defaultOptions;
 
     if (typeof options === 'function') callback = options;
-    
+
     html2canvas(element).then(function (canvas) {
       const pdf = new jsPDF('p', 'px', 'a4');
       const canvasWidth = canvas.width;
@@ -45,7 +45,7 @@ const jsPDF = require('jspdf');
 
         pdf.addImage(tempCanvas.toDataURL("image/png"), 'PNG', options.margin,
           options.margin, imgWidth, imgHeight);
-        
+
         position += tempHeight;
         if (position <= canvasHeight) {
           pdf.addPage();
@@ -55,6 +55,4 @@ const jsPDF = require('jspdf');
       if (typeof callback === 'function') callback();
     });
   }
-
-  return html2pdf;
 }));
