@@ -1,17 +1,7 @@
 const html2canvas = require('html2canvas');
 const jsPDF = require('jspdf');
 
-(function (global, name, factory) {
-  "use strict";
-
-  if (typeof exports === 'object' && typeof module !== 'undefined') {
-    module.exports = factory();
-  } else if (typeof define === 'function' && (define.amd || define.cmd)) {
-    define(factory);
-  } else {
-    global[name] = factory.apply(this);
-  }
-}(this, "simpleHTML2PDF", function () {
+module.exports = function () {
   return function (element, options, callback) {
     const defaultOptions = {
       filename: 'file.pdf',
@@ -23,6 +13,8 @@ const jsPDF = require('jspdf');
     if (typeof options === 'function') callback = options;
 
     html2canvas(element).then(function (canvas) {
+      // canvas 宽度为 720px 最适合打印
+      const CANVAS_PAGE_RATE = 720 / 446.46;
       const pdf = new jsPDF('p', 'px', 'a4');
       const canvasWidth = canvas.width;
       const canvasHeight = canvas.height;
@@ -30,6 +22,10 @@ const jsPDF = require('jspdf');
       const pageHeight = pdf.internal.pageSize.getHeight();
       const imgWidth = pageWidth - options.margin * 2;
       const imgHeight = pageHeight - options.margin * 2;
+      const MAX_CANVAS_WIDTH = Number.parseInt(CANVAS_PAGE_RATE * imgWidth);
+      
+      let addImageWH = false;
+      if (canvasWidth <= MAX_CANVAS_WIDTH) addImageWH = true;
 
       let position = 0;
       while (position <= canvasHeight) {
@@ -43,8 +39,13 @@ const jsPDF = require('jspdf');
         const imgData = bodyCtx.getImageData(0, position, canvasWidth, tempHeight);
         tempCtx.putImageData(imgData, 0, 0, 0, 0, canvasWidth, tempHeight);
 
-        pdf.addImage(tempCanvas.toDataURL("image/png"), 'PNG', options.margin,
-          options.margin, imgWidth, imgHeight);
+        if (addImageWH) {
+          pdf.addImage(tempCanvas.toDataURL("image/png"), 'PNG', options.margin,
+            options.margin);
+        } else {
+          pdf.addImage(tempCanvas.toDataURL("image/png"), 'PNG', options.margin,
+            options.margin, imgWidth, imgHeight);
+        }
 
         position += tempHeight;
         if (position <= canvasHeight) {
@@ -55,4 +56,4 @@ const jsPDF = require('jspdf');
       if (typeof callback === 'function') callback();
     });
   }
-}));
+};

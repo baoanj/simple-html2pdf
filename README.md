@@ -1,4 +1,7 @@
 # Simple HTML2PDF
+[![NPM Downloads](https://img.shields.io/npm/dm/simple-html2pdf.svg)](https://www.npmjs.org/package/simple-html2pdf)
+[![NPM Version](https://img.shields.io/npm/v/simple-html2pdf.svg)](https://www.npmjs.org/package/simple-html2pdf)
+
 Client-Side Simple html -> pdf converter using html2canvas and jsPDF.
 
 ## Usage

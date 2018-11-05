@@ -1,12 +1,11 @@
 const path = require('path');
-const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   mode: 'production',
-  entry: './src/main.js',
+  entry: './src/browser.js',
   output: {
-    filename: 'bundle.js',
+    filename: 'simple-html2pdf.js',
     path: path.resolve(__dirname, 'dist')
   },
   optimization: {
