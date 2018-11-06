@@ -5,46 +5,75 @@ module.exports = function () {
   return function (element, options, callback) {
     const defaultOptions = {
       filename: 'file.pdf',
-      margin: 20
+      margin: 40,
+      smart: false
     };
     options = ({}).toString.call(options) === '[object Object]' ?
       Object.assign({}, defaultOptions, options) : defaultOptions;
 
     if (typeof options === 'function') callback = options;
 
-    html2canvas(element).then(function (canvas) {
-      // canvas 宽度为 720px 最适合打印
-      const CANVAS_PAGE_RATE = 720 / 446.46;
+    const BEST_WIDTH = 795; // 元素宽度 + 2 * margin = 795 最适合打印
+    const BEST_ELEMENT_WIDTH = BEST_WIDTH - 2 * options.margin;
+
+    let freeElement = element;
+
+    if (({}).toString.call(element) === '[object HTMLBodyElement]') {
+      options.smart = false;
+    }
+    if (options.smart) {
+      freeElement = element.cloneNode(true);
+      const printCC = document.createElement('div');
+      printCC.style.position = 'fixed';
+      printCC.style.left = 0;
+      printCC.style.top = 0;
+      printCC.style.opacity = 0;
+      printCC.style.zIndex = -1;
+      printCC.appendChild(freeElement);
+      element.parentNode.appendChild(printCC)
+
+      if (freeElement.offsetWidth < freeElement.scrollWidth) {
+        freeElement.style.width = `${freeElement.scrollWidth + freeElement.offsetWidth -
+          freeElement.clientWidth}px`;
+      } else if (freeElement.offsetWidth > BEST_ELEMENT_WIDTH) {
+        freeElement.style.width = `${BEST_ELEMENT_WIDTH}px`;
+        if (freeElement.offsetWidth < freeElement.scrollWidth) {
+          freeElement.style.width = `${freeElement.scrollWidth + freeElement.offsetWidth -
+            freeElement.clientWidth}px`;
+        }
+      }
+    }
+
+    html2canvas(freeElement).then(function (canvas) {
       const pdf = new jsPDF('p', 'px', 'a4');
       const canvasWidth = canvas.width;
       const canvasHeight = canvas.height;
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = pageWidth - options.margin * 2;
-      const imgHeight = pageHeight - options.margin * 2;
-      const MAX_CANVAS_WIDTH = Number.parseInt(CANVAS_PAGE_RATE * imgWidth);
-      
+
+      const pageMargin = Number.parseInt(options.margin * pageWidth / BEST_WIDTH);
+      const imgWidth = pageWidth - 2 * pageMargin;
+      const imgHeight = pageHeight - 2 * pageMargin;
+
       let addImageWH = false;
-      if (canvasWidth <= MAX_CANVAS_WIDTH) addImageWH = true;
+      if (canvasWidth <= BEST_ELEMENT_WIDTH) addImageWH = true;
 
       let position = 0;
       while (position <= canvasHeight) {
         const tempCanvas = document.createElement('canvas');
-        const tempHeight = canvasWidth * imgHeight / imgWidth;
+        const tempHeight = Math.max(BEST_ELEMENT_WIDTH, canvasWidth) * imgHeight / imgWidth;
         tempCanvas.width = canvasWidth;
         tempCanvas.height = tempHeight;
         const tempCtx = tempCanvas.getContext('2d');
-
         const bodyCtx = canvas.getContext('2d');
         const imgData = bodyCtx.getImageData(0, position, canvasWidth, tempHeight);
         tempCtx.putImageData(imgData, 0, 0, 0, 0, canvasWidth, tempHeight);
 
+        const tempCanvasData = tempCanvas.toDataURL("image/png");
         if (addImageWH) {
-          pdf.addImage(tempCanvas.toDataURL("image/png"), 'PNG', options.margin,
-            options.margin);
+          pdf.addImage(tempCanvasData, 'PNG', pageMargin, pageMargin);
         } else {
-          pdf.addImage(tempCanvas.toDataURL("image/png"), 'PNG', options.margin,
-            options.margin, imgWidth, imgHeight);
+          pdf.addImage(tempCanvasData, 'PNG', pageMargin, pageMargin, imgWidth, imgHeight);
         }
 
         position += tempHeight;

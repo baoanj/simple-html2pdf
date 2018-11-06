@@ -13,8 +13,9 @@ $ npm install simple-html2pdf --save
 import html2pdf from 'simple-html2pdf';
 
 // html2pdf(element[, options][, callback])
-html2pdf(document.body, {
+html2pdf(document.getElementById('xxx'), {
   filename: 'file.pdf',
-  margin: 20
+  margin: 40,
+  smart: false // true: Smartly adjust content width
 }, () => { console.log('finish!'); });
 ```

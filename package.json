@@ -1,6 +1,6 @@
 {
   "name": "simple-html2pdf",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Simple html -> pdf converter using html2canvas and jsPDF.",
   "main": "dist/module.js",
   "repository": {
