@@ -18,8 +18,10 @@ import html2pdf from 'simple-html2pdf';
 html2pdf(document.body, {
   filename: 'file.pdf',
   margin: 40,
+  save: true, // true: Save as file
+  output: '', // jsPDF output type
   smart: true // true: Smartly adjust content width
-}, () => { console.log('finish!'); });
+}, output => { console.log('finish!', output); });
 ```
 
 ```html
@@ -28,3 +30,10 @@ html2pdf(document.body, {
   // html2pdf(element[, options][, callback])
 </script>
 ```
+
+## Options
+- output `string` `optional`
+
+[jsPDF doc](https://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html#output)
+
+Possible values are 'save', 'arraybuffer', 'blob', 'bloburi'/'bloburl', 'datauristring'/'dataurlstring', 'datauri'/'dataurl', 'dataurlnewwindow', 'pdfobjectnewwindow', 'pdfjsnewwindow'.

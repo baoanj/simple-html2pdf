@@ -2,15 +2,17 @@ const html2canvas = require('html2canvas');
 const jsPDF = require('jspdf');
 
 module.exports = function (element, options, callback) {
+  if (typeof options === 'function') callback = options;
+
   const defaultOptions = {
     filename: 'file.pdf',
     margin: 40,
+    save: true,
+    output: '',
     smart: true
   };
   options = ({}).toString.call(options) === '[object Object]' ?
     Object.assign({}, defaultOptions, options) : defaultOptions;
-
-  if (typeof options === 'function') callback = options;
 
   const BEST_WIDTH = 795; // 元素宽度 + 2 * margin = 795 最适合打印
   const BEST_ELEMENT_WIDTH = BEST_WIDTH - 2 * options.margin;
@@ -105,8 +107,13 @@ module.exports = function (element, options, callback) {
         pdf.addPage();
       }
     }
-    pdf.save(options.filename);
+    if (options.save) pdf.save(options.filename);
+
+    let output
+    // https://raw.githack.com/MrRio/jsPDF/master/docs/jspdf.js.html#line2255
+    if (options.output) output = pdf.output(options.output, options)
+
     if (printFF) document.body.removeChild(printFF);
-    if (typeof callback === 'function') callback();
+    if (typeof callback === 'function') callback(output);
   });
 };
