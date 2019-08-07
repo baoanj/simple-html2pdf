@@ -1,31 +1,28 @@
 {
   "name": "simple-html2pdf",
-  "version": "1.2.2",
-  "description": "Simple html -> pdf converter using html2canvas and jsPDF.",
-  "main": "dist/module.js",
+  "version": "2.0.0",
+  "description": "Simple HTML-to-PDF using html2canvas and jsPDF.",
+  "main": "dist/html2pdf.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/baoanj/simple-html2pdf.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:browser": "webpack",
-    "build:module": "babel src --out-dir dist --presets=@babel/env --ignore src/browser.js",
-    "build": "npm run build:module && npm run build:browser"
+    "build": "webpack"
   },
   "author": "baoanj",
   "license": "MIT",
   "dependencies": {
-    "html2canvas": "^1.0.0-alpha.12",
-    "jspdf": "^1.4.1"
+    "html2canvas": "^1.0.0-rc.3",
+    "jspdf": "^1.5.3"
   },
   "devDependencies": {
-    "@babel/cli": "^7.1.2",
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
-    "babel-loader": "^8.0.4",
-    "uglifyjs-webpack-plugin": "^2.0.1",
-    "webpack": "^4.23.1",
-    "webpack-cli": "^3.1.2"
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-loader": "^8.0.6",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
   }
 }

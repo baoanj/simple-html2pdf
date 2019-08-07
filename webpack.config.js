@@ -3,10 +3,12 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   mode: 'production',
-  entry: './src/browser.js',
+  entry: './src/main.js',
   output: {
-    filename: 'simple-html2pdf.js',
-    path: path.resolve(__dirname, 'dist')
+    filename: 'html2pdf.js',
+    path: path.resolve(__dirname, 'dist'),
+    library: 'html2pdf',
+    libraryTarget: 'umd'
   },
   optimization: {
     minimizer: [
