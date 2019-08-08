@@ -2,6 +2,10 @@ const html2canvas = require('html2canvas');
 const jsPDF = require('jspdf');
 
 module.exports = function (element, options, callback) {
+  if (!(element instanceof HTMLElement)) {
+    throw new Error('First parameter is not HTMLElement');
+  }
+
   if (typeof options === 'function') callback = options;
 
   const defaultOptions = {
